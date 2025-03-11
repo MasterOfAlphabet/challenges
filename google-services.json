@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "620931661204",
+    "project_id": "master-of-alphabet",
+    "storage_bucket": "master-of-alphabet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620931661204:android:40a2e7f3b4dd7b41186381",
+        "android_client_info": {
+          "package_name": "com.rankgenie.masterofalphabet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0pwm2kHPjQEYa1YH5yMdOjaBY786C9cI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

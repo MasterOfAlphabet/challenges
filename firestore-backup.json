@@ -1,0 +1,600 @@
+{
+  "users": [
+    {
+      "id": "UMSRG3ytOEM7EPPPzjEMwc39sMF2",
+      "email": "student@rankgenie.in",
+      "role": "Student",
+      "uid": "UMSRG3ytOEM7EPPPzjEMwc39sMF2"
+    },
+    {
+      "id": "w5kdorakPHUSUc9dZImAMKdxbMF3",
+      "email": "teacher@rankgenie.in",
+      "role": "Teacher",
+      "uid": "w5kdorakPHUSUc9dZImAMKdxbMF3"
+    },
+    {
+      "id": "xfk74YgItqMrifj82hHJqBdHXIh1",
+      "uid": "xfk74YgItqMrifj82hHJqBdHXIh1",
+      "role": "Admin",
+      "email": "admin@rankgenie.in"
+    },
+    {
+      "id": "yAg7Ix1EBfSQpFFO8Jm0tGONWY82",
+      "email": "principal@rankgenie.in",
+      "role": "Principal",
+      "uid": "yAg7Ix1EBfSQpFFO8Jm0tGONWY82"
+    }
+  ],
+  "challenges": [],
+  "battles": [
+    {
+      "id": "N90KoQqTr3Ub9QuIu6Io",
+      "answeredPlayers": {
+        "0": [
+          "zGT9oeCIVCZtDDHchRswxvbNRbM2"
+        ],
+        "1": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ],
+        "2": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ],
+        "3": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ],
+        "4": [
+          "WI2D2VFiFkNxHkLKuhijRYBOPo63"
+        ],
+        "5": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ],
+        "6": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ],
+        "7": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ],
+        "8": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ],
+        "9": [
+          "GNhrlTpnUJSkjMPA0jRCaJ15TPp1"
+        ]
+      },
+      "createdAt": {
+        "seconds": 1741323826,
+        "nanoseconds": 159000000
+      },
+      "class": "1",
+      "questions": [
+        {
+          "correctAnswer": 1,
+          "word": "happy",
+          "options": [
+            "hapy",
+            "happy",
+            "happi"
+          ],
+          "type": "Dictation",
+          "question": "Listen to the word carefully"
+        },
+        {
+          "correctAnswer": 0,
+          "type": "Correctly Spelled Word",
+          "question": "Which word is spelled correctly?",
+          "options": [
+            "apple",
+            "appel",
+            "aple"
+          ]
+        },
+        {
+          "options": [
+            "apple",
+            "appel",
+            "aple"
+          ],
+          "question": "Listen to the word carefully",
+          "word": "apple",
+          "type": "Dictation",
+          "correctAnswer": 0
+        },
+        {
+          "word": "book",
+          "options": [
+            "book",
+            "bok",
+            "boook"
+          ],
+          "type": "Dictation",
+          "correctAnswer": 0,
+          "question": "Listen to the word carefully"
+        },
+        {
+          "correctAnswer": 0,
+          "type": "Unscramble",
+          "question": "Unscramble the word: 'tac'",
+          "options": [
+            "cat",
+            "act",
+            "tac"
+          ]
+        },
+        {
+          "question": "Listen to the word carefully",
+          "options": [
+            "sun",
+            "son",
+            "sunn"
+          ],
+          "word": "sun",
+          "type": "Dictation",
+          "correctAnswer": 0
+        },
+        {
+          "type": "Unscramble",
+          "question": "Unscramble the word: 'elppa'",
+          "correctAnswer": 0,
+          "options": [
+            "apple",
+            "papel",
+            "aplep"
+          ]
+        },
+        {
+          "type": "Missing Letters",
+          "options": [
+            "a",
+            "e",
+            "i"
+          ],
+          "correctAnswer": 0,
+          "question": "Complete the word: 'c_t'"
+        },
+        {
+          "type": "Unscramble",
+          "options": [
+            "tree",
+            "reet",
+            "teer"
+          ],
+          "question": "Unscramble the word: 'eert'",
+          "correctAnswer": 0
+        },
+        {
+          "question": "Complete the word: 'b_ok'",
+          "type": "Missing Letters",
+          "options": [
+            "o",
+            "a",
+            "u"
+          ],
+          "correctAnswer": 0
+        }
+      ],
+      "place": "Class",
+      "currentQuestionIndex": 9,
+      "players": [
+        {
+          "id": "GNhrlTpnUJSkjMPA0jRCaJ15TPp1",
+          "name": "A"
+        },
+        {
+          "id": "WI2D2VFiFkNxHkLKuhijRYBOPo63",
+          "name": "S"
+        },
+        {
+          "name": "D",
+          "id": "zGT9oeCIVCZtDDHchRswxvbNRbM2"
+        }
+      ],
+      "status": "ended",
+      "module": "Spelling",
+      "scores": {
+        "zGT9oeCIVCZtDDHchRswxvbNRbM2": 1,
+        "WI2D2VFiFkNxHkLKuhijRYBOPo63": 1,
+        "GNhrlTpnUJSkjMPA0jRCaJ15TPp1": 8
+      }
+    },
+    {
+      "id": "YBVtZqegLQoQssRMKcpV",
+      "place": "Class",
+      "answeredPlayers": {
+        "0": [
+          "hNmfVD5lPHVxBhOaIvp8ZxVaeRz2",
+          "83OMvhKetrOF5I2uIWH5WetirCB2",
+          "Xh3tXCIXcvZy1TRXN1zgL6Bx5hB2"
+        ],
+        "1": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "2": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "3": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "4": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "5": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "6": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "7": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "8": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ],
+        "9": [
+          "83OMvhKetrOF5I2uIWH5WetirCB2"
+        ]
+      },
+      "status": "ended",
+      "currentQuestionIndex": 9,
+      "players": [
+        {
+          "id": "83OMvhKetrOF5I2uIWH5WetirCB2",
+          "name": "Q"
+        },
+        {
+          "name": "W",
+          "id": "hNmfVD5lPHVxBhOaIvp8ZxVaeRz2"
+        },
+        {
+          "id": "Xh3tXCIXcvZy1TRXN1zgL6Bx5hB2",
+          "name": "E"
+        }
+      ],
+      "questions": [
+        {
+          "correctAnswer": 0,
+          "question": "Unscramble the word: 'pyhap'",
+          "options": [
+            "happy",
+            "hapy",
+            "happi"
+          ],
+          "type": "Unscramble"
+        },
+        {
+          "options": [
+            "moon",
+            "mono",
+            "nomo"
+          ],
+          "correctAnswer": 0,
+          "type": "Unscramble",
+          "question": "Unscramble the word: 'noom'"
+        },
+        {
+          "question": "Which word is spelled correctly?",
+          "options": [
+            "dog",
+            "dogg",
+            "doog"
+          ],
+          "correctAnswer": 0,
+          "type": "Correctly Spelled Word"
+        },
+        {
+          "type": "Correctly Spelled Word",
+          "correctAnswer": 0,
+          "options": [
+            "book",
+            "bok",
+            "boook"
+          ],
+          "question": "Which word is spelled correctly?"
+        },
+        {
+          "type": "Dictation",
+          "question": "Listen to the word carefully",
+          "options": [
+            "house",
+            "hous",
+            "hose"
+          ],
+          "word": "house",
+          "correctAnswer": 0
+        },
+        {
+          "options": [
+            "apple",
+            "appel",
+            "aple"
+          ],
+          "question": "Which word is spelled correctly?",
+          "correctAnswer": 0,
+          "type": "Correctly Spelled Word"
+        },
+        {
+          "options": [
+            "o",
+            "a",
+            "u"
+          ],
+          "question": "Complete the word: 'fl_wer'",
+          "type": "Missing Letters",
+          "correctAnswer": 0
+        },
+        {
+          "question": "Unscramble the word: 'rewolf'",
+          "correctAnswer": 0,
+          "type": "Unscramble",
+          "options": [
+            "flower",
+            "fowler",
+            "flowre"
+          ]
+        },
+        {
+          "correctAnswer": 0,
+          "question": "Which word is spelled correctly?",
+          "type": "Correctly Spelled Word",
+          "options": [
+            "tree",
+            "tre",
+            "trei"
+          ]
+        },
+        {
+          "options": [
+            "house",
+            "hous",
+            "hose"
+          ],
+          "correctAnswer": 0,
+          "type": "Correctly Spelled Word",
+          "question": "Which word is spelled correctly?"
+        }
+      ],
+      "scores": {
+        "83OMvhKetrOF5I2uIWH5WetirCB2": 10,
+        "Xh3tXCIXcvZy1TRXN1zgL6Bx5hB2": 1,
+        "hNmfVD5lPHVxBhOaIvp8ZxVaeRz2": 1
+      },
+      "class": "1",
+      "module": "Spelling",
+      "createdAt": {
+        "seconds": 1741323207,
+        "nanoseconds": 565000000
+      }
+    },
+    {
+      "id": "i0F21n3nuXuwpu1wgU6e",
+      "class": "1",
+      "createdAt": {
+        "seconds": 1741324469,
+        "nanoseconds": 369000000
+      },
+      "scores": {
+        "ZllqPc8CSbStxr1wRd82cjBth1A3": 1,
+        "Tbo7lygNAZV47ptbC0CUrie7nse2": 3,
+        "77hdfXDOgbMiw7kHDTZbYKEoqT63": 6
+      },
+      "players": [
+        {
+          "id": "77hdfXDOgbMiw7kHDTZbYKEoqT63",
+          "name": "C"
+        },
+        {
+          "name": "A",
+          "id": "Tbo7lygNAZV47ptbC0CUrie7nse2"
+        },
+        {
+          "id": "ZllqPc8CSbStxr1wRd82cjBth1A3",
+          "name": "D"
+        }
+      ],
+      "status": "ended",
+      "questions": [
+        {
+          "question": "Unscramble the word: 'elppa'",
+          "correctAnswer": 0,
+          "type": "Unscramble",
+          "options": [
+            "apple",
+            "papel",
+            "aplep"
+          ]
+        },
+        {
+          "correctAnswer": 0,
+          "question": "Unscramble the word: 'rewolf'",
+          "options": [
+            "flower",
+            "fowler",
+            "flowre"
+          ],
+          "type": "Unscramble"
+        },
+        {
+          "correctAnswer": 0,
+          "word": "sun",
+          "options": [
+            "sun",
+            "son",
+            "sunn"
+          ],
+          "question": "Listen to the word carefully",
+          "type": "Dictation"
+        },
+        {
+          "word": "flower",
+          "options": [
+            "flower",
+            "flour",
+            "floer"
+          ],
+          "correctAnswer": 0,
+          "type": "Dictation",
+          "question": "Listen to the word carefully"
+        },
+        {
+          "word": "cat",
+          "options": [
+            "cat",
+            "kat",
+            "katt"
+          ],
+          "correctAnswer": 0,
+          "type": "Dictation",
+          "question": "Listen to the word carefully"
+        },
+        {
+          "options": [
+            "hapy",
+            "happy",
+            "happi"
+          ],
+          "question": "Which word is spelled correctly?",
+          "type": "Correctly Spelled Word",
+          "correctAnswer": 1
+        },
+        {
+          "type": "Correctly Spelled Word",
+          "options": [
+            "apple",
+            "appel",
+            "aple"
+          ],
+          "correctAnswer": 0,
+          "question": "Which word is spelled correctly?"
+        },
+        {
+          "type": "Correctly Spelled Word",
+          "question": "Which word is spelled correctly?",
+          "correctAnswer": 0,
+          "options": [
+            "dog",
+            "dogg",
+            "doog"
+          ]
+        },
+        {
+          "question": "Which word is spelled correctly?",
+          "type": "Correctly Spelled Word",
+          "options": [
+            "tree",
+            "tre",
+            "trei"
+          ],
+          "correctAnswer": 0
+        },
+        {
+          "correctAnswer": 0,
+          "options": [
+            "tree",
+            "tre",
+            "trei"
+          ],
+          "word": "tree",
+          "question": "Listen to the word carefully",
+          "type": "Dictation"
+        }
+      ],
+      "place": "Class",
+      "module": "Spelling"
+    }
+  ],
+  "battleHistory": [
+    {
+      "id": "hNldz0qPpL3tlTqx57WH",
+      "players": [
+        {
+          "id": "JXbpcwK064TymKjQXFPVNXtKzW23",
+          "name": "A"
+        },
+        {
+          "name": "B",
+          "id": "WC6cu6tZ61X3W07bZcPaDTxs4On1"
+        }
+      ],
+      "scores": {
+        "JXbpcwK064TymKjQXFPVNXtKzW23": 9,
+        "WC6cu6tZ61X3W07bZcPaDTxs4On1": 2
+      },
+      "battleId": "tzLlQpOUyQWg3SB7Wcaa",
+      "createdAt": {
+        "seconds": 1741321346,
+        "nanoseconds": 694000000
+      }
+    },
+    {
+      "id": "lIkGiRIzSeyamtiQWYks",
+      "scores": {
+        "qcg0kagKKpOD87C54PBMxodaiKj2": 1,
+        "uQYTvLYAe2hslQwtt8ynIaSvA8w1": 8
+      },
+      "createdAt": {
+        "seconds": 1741320033,
+        "nanoseconds": 145000000
+      },
+      "players": [
+        {
+          "name": "M",
+          "id": "uQYTvLYAe2hslQwtt8ynIaSvA8w1"
+        },
+        {
+          "name": "C",
+          "id": "qcg0kagKKpOD87C54PBMxodaiKj2"
+        }
+      ],
+      "battleId": "ByF7xljVjRYNPwvAQbac"
+    },
+    {
+      "id": "lYvdCRvgWdx5LmeDOn0r",
+      "battleId": "9RVJUKq15zgaCZfkmD0g",
+      "players": [
+        {
+          "id": "DWIXgqTj3dbzZ2JIJGboZE5Bt8Y2",
+          "name": "Q"
+        },
+        {
+          "name": "M",
+          "id": "TX6Nzp2YAqcDZvRXxo0CISJxVIr1"
+        },
+        {
+          "id": "CRl3KhObdbPDOq6QLI8JjJey5h83",
+          "name": "S"
+        }
+      ],
+      "createdAt": {
+        "seconds": 1741296417,
+        "nanoseconds": 991000000
+      },
+      "scores": {
+        "DWIXgqTj3dbzZ2JIJGboZE5Bt8Y2": 7,
+        "TX6Nzp2YAqcDZvRXxo0CISJxVIr1": 1,
+        "CRl3KhObdbPDOq6QLI8JjJey5h83": 2
+      }
+    },
+    {
+      "id": "pXjCILeU7Nk3Pv9emOWu",
+      "battleId": "y43bTKVbzJoAbw2Fn8fB",
+      "players": [
+        {
+          "name": "C",
+          "id": "3blVXSguCEh1zQchX8jTHLFQVjL2"
+        },
+        {
+          "id": "hTFt86u9WXUuBtw3Mgx7K5otraP2",
+          "name": "M"
+        }
+      ],
+      "createdAt": {
+        "seconds": 1741298805,
+        "nanoseconds": 62000000
+      },
+      "scores": {
+        "3blVXSguCEh1zQchX8jTHLFQVjL2": 9,
+        "hTFt86u9WXUuBtw3Mgx7K5otraP2": 6
+      }
+    }
+  ],
+  "testScores": []
+}
