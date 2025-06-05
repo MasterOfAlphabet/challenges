@@ -1,7 +1,7 @@
 // TestSkillsHistoryScreen.js
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { db } from "../../firebase"; // Firestore import
+import { firestore } from "../../firebase"; // Firestore import
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { AuthContext } from "../../App";
 

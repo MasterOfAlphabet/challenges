@@ -11,7 +11,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as Speech from "expo-speech";
 import { AuthContext } from "../../App";
 import { allQuestions } from "../data/testYourSkillsQuestionsData";
-import { db } from "../../firebase"; // Import Firestore
+import { firestore } from "../../firebase"; // Import Firestore
 import { collection, addDoc } from "firebase/firestore"; // Firestore functions
 
 export default function TestYourSkills({ navigation }) {

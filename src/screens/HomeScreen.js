@@ -1,4 +1,3 @@
-// HomeScreen.js
 import React, { useEffect, useRef, useContext } from "react";
 import {
   View,
@@ -13,11 +12,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-
-// Import AuthContext
 import { AuthContext } from "../../App";
+import { LinearGradient } from "expo-linear-gradient";
+import { auth } from "../../firebase"; // Make sure this path is correct
+import { signOut } from "firebase/auth";
 
-// 8 Modules
+
 const modules = [
   { name: "Spelling", icon: "book-outline", screen: "Spelling" },
   { name: "Reading", icon: "reader-outline", screen: "Reading" },
@@ -29,19 +29,17 @@ const modules = [
   { name: "S.H.A.R.P", icon: "flash-outline", screen: "Sharp" },
 ];
 
-// Assign a unique color to each module
 const moduleColors = {
-  Spelling: "#f44336",      // Red
-  Reading: "#e91e63",       // Pink
-  Pronunciation: "#9c27b0", // Purple
-  Grammar: "#673ab7",       // Deep Purple
-  Writing: "#3f51b5",       // Indigo
-  Listening: "#2196f3",     // Blue
-  Vocabulary: "#4caf50",    // Green
-  "S.H.A.R.P": "#ff9800",   // Orange
+  Spelling: "#f44336",
+  Reading: "#e91e63",
+  Pronunciation: "#9c27b0",
+  Grammar: "#673ab7",
+  Writing: "#3f51b5",
+  Listening: "#2196f3",
+  Vocabulary: "#4caf50",
+  "S.H.A.R.P": "#ff9800",
 };
 
-// Sample daily challenges
 const dailyChallenges = [
   {
     module: "Spelling",
@@ -101,29 +99,30 @@ const dailyChallenges = [
   },
 ];
 
+
 const HERO_HEIGHT = 200;
 const ITEM_WIDTH_MOBILE = 0.75;
 const SPACER_ITEM_SIZE =
   (Dimensions.get("window").width -
-    Dimensions.get("window").width * ITEM_WIDTH_MOBILE) /
+  Dimensions.get("window").width * ITEM_WIDTH_MOBILE) /
   2;
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
   const isLargeScreen = width >= 768;
-
-  // Access AuthContext
   const { loggedInUser, setLoggedInUser } = useContext(AuthContext);
 
-  // A simple logout handler
-  const handleLogout = () => {
-    // If using Firebase Auth, you'd also call signOut() here.
-    // For this demo, just set loggedInUser = null
-    setLoggedInUser(null);
-  };
+  // 1. Update the handleLogout function (around line 50)
+const handleLogout = () => {
+  setLoggedInUser(null);
+  // If using Firebase auth, add: 
+  // import { auth } from '../firebase';
+  // import { signOut } from 'firebase/auth';
+  // await signOut(auth);
+  navigation.navigate("Login"); // Changed from no navigation to this
+};
 
-  // Animations
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const waveAnim = useRef(new Animated.Value(0)).current;
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -175,14 +174,16 @@ export default function HomeScreen() {
   };
 
   const renderChallengeItem = ({ item }) => {
-    if (!item || !item.module) {
-      return null;
-    }
+    if (!item || !item.module) return null;
     const challengeColor = moduleColors[item.module] || "#9c27b0";
 
     return (
       <TouchableOpacity
-        style={[styles.challengeCard, { backgroundColor: challengeColor }]}
+        style={[
+          styles.challengeCard,
+          { backgroundColor: challengeColor },
+          isLargeScreen && { height: 180, marginRight: 0, marginBottom: 15 }
+        ]}
         onPress={() => {
           if (item.myStatus === "Submitted") {
             alert("You already submitted this challenge.");
@@ -198,7 +199,13 @@ export default function HomeScreen() {
           <Ionicons name="trophy-outline" size={24} color="#fff" />
           <Text style={styles.challengeModule}>{item.module}</Text>
         </View>
-        <Text style={styles.challengeTitle}>{item.challengeTitle}</Text>
+        <Text 
+          style={styles.challengeTitle}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+        >
+          {item.challengeTitle}
+        </Text>
         <View style={styles.challengeMeta}>
           <Text style={styles.challengeTime}>⏱ {item.timeLeft}</Text>
           <Text style={styles.challengeSubs}>Subs: {item.submissions}</Text>
@@ -215,7 +222,6 @@ export default function HomeScreen() {
     );
   };
 
-  // For mobile => add spacer items, for tablet => just modules
   const moduleData = isLargeScreen
     ? modules
     : [{ key: "left-spacer" }, ...modules, { key: "right-spacer" }];
@@ -237,8 +243,7 @@ export default function HomeScreen() {
             ]}
           />
           <View style={styles.heroContent}>
-            {/* If user is not logged in => show Signup & Login */}
-            {!loggedInUser && (
+            {!loggedInUser ? (
               <>
                 <TouchableOpacity
                   style={styles.signupButton}
@@ -247,19 +252,16 @@ export default function HomeScreen() {
                   <Ionicons name="person-add-outline" size={20} color="#6200ea" />
                   <Text style={styles.signupButtonText}>Signup</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.loginButton}
-                  onPress={() => navigation.navigate("Login")}
-                >
-                  <Ionicons name="log-in-outline" size={20} color="#6200ea" />
-                  <Text style={styles.loginButtonText}>Login</Text>
-                </TouchableOpacity>
+                // 2. Update the login button in the hero section (around line 180)
+<TouchableOpacity
+  style={styles.loginButton}
+  onPress={() => navigation.navigate("Login")} // Keep as navigate (not replace)
+>
+  <Ionicons name="log-in-outline" size={20} color="#6200ea" />
+  <Text style={styles.loginButtonText}>Login</Text>
+</TouchableOpacity>
               </>
-            )}
-
-            {/* If user is logged in => show role/email & Logout */}
-            {loggedInUser && (
+            ) : (
               <>
                 <Text style={styles.loggedInText}>
                   Logged in as {loggedInUser.role || loggedInUser.email}
@@ -273,24 +275,23 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </>
             )}
-
             <Text style={styles.appTitle}>Master of Alphabet</Text>
             <Text style={styles.appSubtitle}>8-in-1 English Skills</Text>
           </View>
         </Animated.View>
 
+        {/* Rest of your existing JSX remains exactly the same */}
         {/* Modules Section */}
         <View style={styles.modulesContainer}>
           <Text style={styles.modulesTitle}>Explore Modules</Text>
           {isLargeScreen ? (
-            <FlatList
-              data={moduleData}
-              keyExtractor={(item, index) => item.name || index.toString()}
-              numColumns={4}
-              columnWrapperStyle={styles.modulesGridRow}
-              contentContainerStyle={{ alignItems: "center" }}
-              renderItem={renderModuleItem}
-            />
+            <View style={styles.modulesGridContainer}>
+              {modules.map((item, index) => (
+                <View key={index} style={styles.moduleItemWrapper}>
+                  {renderModuleItem({ item })}
+                </View>
+              ))}
+            </View>
           ) : (
             <Animated.FlatList
               data={moduleData}
@@ -310,17 +311,74 @@ export default function HomeScreen() {
           )}
         </View>
 
-        {/* Daily Challenges */}
+        {/* Quick Access Links */}
+        <View style={styles.linksContainer}>
+          <Text style={styles.linksTitle}>Quick Access</Text>
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("LearnPrepareTest", { section: "Learn" })}
+          >
+            <Text style={styles.linkText}>Learn</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("LearnPrepareTest", { section: "Prepare" })}
+          >
+            <Text style={styles.linkText}>Prepare</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("LearnPrepareTest", { section: "Test" })}
+          >
+            <Text style={styles.linkText}>Test</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("FindTheCorrectlySpelledWord")}
+          >
+            <Text style={styles.linkText}>Find the Correctly Spelled Word</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("Unscramble")}
+          >
+            <Text style={styles.linkText}>Unscrambled</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("DailyChallengesScreen")}
+          >
+            <Text style={styles.linkText}>Daily Challenges</Text>
+          </TouchableOpacity>
+
+        </View>
+
+        {/* Diagnostic Buttons */}
+        <TouchableOpacity
+          style={styles.diagnosticButton}
+          onPress={() => navigation.navigate("ModuleSelectionScreen")}
+        >
+          <LinearGradient
+            colors={['#6200ea', '#3700b3']}
+            style={styles.diagnosticButtonGradient}
+          >
+            <Ionicons name="analytics" size={24} color="white" />
+            <Text style={styles.diagnosticButtonText}>Start Diagnostic Test</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        {/* Daily Challenges Section */}
         <View style={styles.challengesContainer}>
           <Text style={styles.challengesTitle}>Daily Challenges</Text>
           {isLargeScreen ? (
-            <FlatList
-              data={dailyChallenges}
-              keyExtractor={(item, index) => item.module + index}
-              renderItem={renderChallengeItem}
-              numColumns={2}
-              columnWrapperStyle={{ justifyContent: "space-between" }}
-            />
+            <View style={styles.challengesGrid}>
+              {dailyChallenges.map((item, index) => (
+                <View key={index} style={styles.challengeItemWrapper}>
+                  {renderChallengeItem({ item })}
+                </View>
+              ))}
+            </View>
           ) : (
             <FlatList
               data={dailyChallenges}
@@ -370,8 +428,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
-  // If user is not logged in => top-left "Signup", top-right "Login"
   signupButton: {
     position: "absolute",
     top: 20,
@@ -408,8 +464,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
-
-  // If user is logged in => show role + logout
   loggedInText: {
     position: "absolute",
     top: 20,
@@ -440,7 +494,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
-
   appTitle: {
     fontSize: 24,
     fontWeight: "bold",
@@ -462,10 +515,16 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 10,
   },
-  modulesGridRow: {
-    flex: 1,
-    justifyContent: "space-evenly",
-    marginBottom: 10,
+  modulesGridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  moduleItemWrapper: {
+    width: '25%',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   moduleItemMobile: {
     width: Dimensions.get("window").width * ITEM_WIDTH_MOBILE * 0.8,
@@ -504,11 +563,19 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 10,
   },
+  challengesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  challengeItemWrapper: {
+    width: '48%',
+    marginBottom: 15,
+  },
   challengeCard: {
     borderRadius: 12,
     padding: 15,
     marginRight: 15,
-    marginBottom: 15,
     elevation: 3,
   },
   challengeModule: {
@@ -542,5 +609,42 @@ const styles = StyleSheet.create({
   challengeStatus: {
     fontSize: 12,
     fontWeight: "bold",
+  },
+  linksContainer: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+  linksTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+  },
+  link: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  linkText: {
+    fontSize: 16,
+    color: "#6200ea",
+  },
+  diagnosticButton: {
+    marginTop: 15,
+    borderRadius: 10,
+    overflow: 'hidden',
+    elevation: 3,
+  },
+  diagnosticButtonGradient: {
+    padding: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  diagnosticButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontSize: 16,
   },
 });

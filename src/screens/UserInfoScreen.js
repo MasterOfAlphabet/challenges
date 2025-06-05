@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { db, auth } from '../firebase'; // Adjust the path as needed
+import { firestore, auth } from '../firebase'; // Adjust the path as needed
 import { signInAnonymously } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 

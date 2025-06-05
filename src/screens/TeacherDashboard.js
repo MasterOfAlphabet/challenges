@@ -24,15 +24,15 @@ export default function TeacherDashboard({ route, navigation }) {
         </Card.Content>
       </Card>
 
-      {/* Submit Challenge Button */}
       <Button
-        mode="contained"
-        onPress={() => navigation.navigate('ChallengeCreationScreen')}
-        style={styles.submitButton}
-      >
-        Submit Challenge
-      </Button>
-
+  mode="contained"
+  onPress={() => navigation.navigate('Challenges', { 
+    screen: 'ChallengeCreation' 
+  })}
+  style={styles.submitButton}
+>
+  Submit Challenge
+</Button>
       {/* If we have a new challenge, show it */}
       {latestChallenge && (
         <Card style={styles.card}>

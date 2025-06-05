@@ -10,7 +10,7 @@ import {
   TextInput,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { db, auth } from "../../firebase";
+import { firestore, auth } from "../../firebase";
 import { signInAnonymously } from "firebase/auth";
 import {
   collection,
@@ -31,7 +31,7 @@ import { allQuestions } from "../data/battleQuestions";
 
 // Enable offline persistence
 import { enableIndexedDbPersistence } from "firebase/firestore";
-enableIndexedDbPersistence(db)
+enableIndexedDbPersistence(firestore)
   .then(() => console.log("Offline persistence enabled"))
   .catch((err) => console.error("Offline persistence error:", err));
   
@@ -101,7 +101,7 @@ export default function Battles() {
 
   // 2) Listen to “waiting” battles
   useEffect(() => {
-    const battlesRef = collection(db, "battles");
+    const battlesRef = collection(firestore, "battles");
     const q = query(battlesRef, where("status", "==", "waiting"));
 
     const unsub = onSnapshot(q, (snap) => {
@@ -115,7 +115,7 @@ export default function Battles() {
   useEffect(() => {
     if (!battle || !battle.id) return;
 
-    const battleRef = doc(db, "battles", battle.id);
+    const battleRef = doc(firestore, "battles", battle.id);
     const unsub = onSnapshot(battleRef, (snap) => {
       if (!snap.exists()) {
         console.log("Battle doc deleted");
@@ -164,14 +164,14 @@ export default function Battles() {
   // 4) 15-min match timer
   useEffect(() => {
   if (!battle || !battle.createdAt || battle.status === "ended") return;
-  console.log("CreatedAt:", battle.createdAt); // Check if this is a valid Timestamp
+    console.log("CreatedAt:", battle.createdAt); // Check if this is a valid Timestamp
   if (!battle.createdAt.toDate) {
     console.error("Invalid createdAt field:", battle.createdAt);
     return;
   }
 
   const createdMs = battle.createdAt.toDate().getTime();
-  console.log("Created Milliseconds:", createdMs); // Check if this is a valid number
+  //console.log("Created Milliseconds:", createdMs); // Check if this is a valid number
   const matchDeadline = createdMs + 15 * 60 * 1000; // 15 minutes
 
   const handleMatchTimer = setInterval(() => {
@@ -245,7 +245,7 @@ export default function Battles() {
     };
 
     try {
-      const ref = await addDoc(collection(db, "battles"), newBattle);
+      const ref = await addDoc(collection(firestore, "battles"), newBattle);
       console.log("Battle created:", ref.id);
 
       // Real-time updates for the newly created doc
@@ -272,7 +272,7 @@ export default function Battles() {
     }
 
     try {
-      const battleRef = doc(db, "battles", battleId);
+      const battleRef = doc(firestore, "battles", battleId);
       const snap = await getDoc(battleRef);
       if (!snap.exists()) {
         console.log("Doc not found after joinBattle");
@@ -304,7 +304,7 @@ export default function Battles() {
   const cancelBattle = async () => {
     if (!battle || battle.status !== "waiting") return;
     try {
-      await deleteDoc(doc(db, "battles", battle.id));
+      await deleteDoc(doc(firestore, "battles", battle.id));
       console.log("Battle canceled.");
       resetBattle();
     } catch (err) {
@@ -319,7 +319,7 @@ export default function Battles() {
       const finalScores = { ...battle.scores };
       finalScores[user.uid] = score;
 
-      await updateDoc(doc(db, "battles", battle.id), {
+      await updateDoc(doc(firestore, "battles", battle.id), {
         status: "ended",
         scores: finalScores,
       });
@@ -354,7 +354,7 @@ export default function Battles() {
       const newScores = { ...battle.scores };
       newScores[user.uid] = newScore;
       try {
-        await updateDoc(doc(db, "battles", battle.id), {
+        await updateDoc(doc(firestore, "battles", battle.id), {
           scores: newScores,
           answeredPlayers: [...battle.answeredPlayers, user.uid], // Track who answered
         });

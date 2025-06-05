@@ -12,465 +12,436 @@ import {
   Button,
   Text,
   Divider,
+  ActivityIndicator,
 } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
+import { auth, firestore, serverTimestamp } from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
-
-const customTheme = {
-  roundness: 8,
-  colors: {
-    primary: "#6200ee",
-    accent: "#03dac4",
-    background: "#f5f5f5",
-    surface: "#fff",
-    text: "#333",
-    placeholder: "#888",
-  },
-};
-
-/** 
- * A small helper that returns how many questions 
- * are required for the selected challenge type. 
- * E.g. 2 for daily, 5 for weekly, 10 for monthly, etc.
- */
-function getQuestionCountForType(challengeType) {
-  switch (challengeType) {
-    case "Daily":
-      return 2;
-    case "Weekly":
-      return 5;
-    case "Monthly":
-      return 10;
-    default:
-      // fallback or "Special"
-      return 3;
-  }
-}
-
-export default function ChallengeCreationScreen({ navigation, route }) {
-  // Basic Challenge Info
+const ChallengeCreationScreen = ({ navigation }) => {
+  // Challenge metadata - default to Daily
   const [challengeName, setChallengeName] = useState("");
-  const [challengeType, setChallengeType] = useState("Daily"); // single-select
+  const [challengeType, setChallengeType] = useState("Daily");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [loading, setLoading] = useState(false);
 
-  // For each question
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [questions, setQuestions] = useState([]); // store all question objects
+  // Questions state
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState({
+    module: "Spelling",
+    type: "Multiple Choice",
+    text: "",
+    options: ["", "", "", ""],
+    correctOption: "A",
+    correctAnswer: ""
+  });
 
-  // For the single question form
-  const [selectedModule, setSelectedModule] = useState("Spelling");
-  const [questionType, setQuestionType] = useState("Multiple Choice");
-  const [questionText, setQuestionText] = useState("");
-
-  // For multiple choice
-  const [optionA, setOptionA] = useState("");
-  const [optionB, setOptionB] = useState("");
-  const [optionC, setOptionC] = useState("");
-  const [optionD, setOptionD] = useState("");
-  const [correctMCAnswer, setCorrectMCAnswer] = useState("A");
-
-  // For fill-in / T-F
-  const [correctAnswer, setCorrectAnswer] = useState("");
-
-  // Toggles for date pickers
+  // UI controls
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
-  // Data sets for pickers
-  const classOptions = [
-    "Class I",
-    "Class II",
-    "Class III",
-    "Class IV",
-    "Class V",
-    "Class VI",
-    "Class VII",
-    "Class VIII",
-    "Class IX",
-    "Class X",
-  ];
-  const moduleOptions = [
-    "Spelling",
-    "Reading",
-    "Pronunciation",
-    "Grammar",
-    "Writing",
-    "Listening",
-    "Vocabulary",
-    "S.H.A.R.P",
-    "8-in-1",
-  ];
-  const challengeTypes = ["Daily", "Weekly", "Monthly", "Special"];
+  // Data options
+  const moduleOptions = ["Spelling", "Reading", "Pronunciation", "Grammar", "Writing", "Listening", "Vocabulary"];
+  const challengeTypes = ["Daily", "Weekly", "Monthly"];
   const questionTypes = ["Multiple Choice", "Fill in the Blank", "True or False"];
 
-  // Computed: how many total questions are required
-  const requiredQuestionCount = getQuestionCountForType(challengeType);
+  const requiredQuestionCount = {
+    Daily: 2,
+    Weekly: 5,
+    Monthly: 10
+  }[challengeType];
 
-  // Start/End Date pickers
-  const onStartDateChange = (event, date) => {
-    setShowStartDatePicker(Platform.OS === "ios");
-    if (date) setStartDate(date);
-  };
-  const onEndDateChange = (event, date) => {
-    setShowEndDatePicker(Platform.OS === "ios");
-    if (date) setEndDate(date);
+  // Set appropriate end date when challenge type changes
+  useEffect(() => {
+    const newEndDate = new Date(startDate);
+    if (challengeType === "Daily") {
+      // Same day for daily challenge
+      setEndDate(new Date(startDate));
+    } else if (challengeType === "Weekly") {
+      newEndDate.setDate(newEndDate.getDate() + 7);
+      setEndDate(newEndDate);
+    } else {
+      newEndDate.setMonth(newEndDate.getMonth() + 1);
+      setEndDate(newEndDate);
+    }
+  }, [challengeType, startDate]);
+
+  // Date handlers
+  const handleDateChange = (date, setDate, setShowPicker) => {
+    if (Platform.OS === "android") setShowPicker(false);
+    if (date) setDate(date);
   };
 
-  /** 
-   * Add the current question form data into "questions" array
-   * and proceed to next question (if any).
-   */
+  // Question management
   const handleAddQuestion = () => {
-    if (!questionText) {
+    if (!currentQuestion.text.trim()) {
       Alert.alert("Validation", "Please enter the question text.");
       return;
     }
 
-    // Build question object
-    let questionData = { 
-      questionText, 
-      module: selectedModule,
-      questionType 
-    };
-
-    if (questionType === "Multiple Choice") {
-      // MC
-      if (!optionA || !optionB || !optionC || !optionD) {
-        Alert.alert("Validation", "Please fill out all MC options.");
+    const questionData = { ...currentQuestion };
+    
+    if (questionData.type === "Multiple Choice") {
+      if (questionData.options.some(opt => !opt.trim())) {
+        Alert.alert("Validation", "Please fill all option fields.");
         return;
       }
-      questionData.options = [optionA, optionB, optionC, optionD];
-      questionData.correctOption = correctMCAnswer; 
-    } else {
-      // Fill-in or T-F
-      if (!correctAnswer) {
-        Alert.alert("Validation", "Please enter the correct answer.");
-        return;
-      }
-      questionData.correctAnswer = correctAnswer;
+    } else if (!questionData.correctAnswer.trim()) {
+      Alert.alert("Validation", "Please enter the correct answer.");
+      return;
     }
 
-    // Add question to the array
-    setQuestions((prev) => [...prev, questionData]);
-
-    // Clear question form for next question
-    setQuestionText("");
-    setOptionA("");
-    setOptionB("");
-    setOptionC("");
-    setOptionD("");
-    setCorrectMCAnswer("A");
-    setCorrectAnswer("");
-
-    // Move index
-    setCurrentQuestionIndex((prev) => prev + 1);
+    setQuestions([...questions, questionData]);
+    resetQuestionForm();
   };
 
-  /**
-   * If user finishes the required number of questions, we can finalize the challenge.
-   */
-  const handleFinalize = () => {
-    // Basic checks
-    if (!challengeName) {
+  const resetQuestionForm = () => {
+    setCurrentQuestion({
+      module: "Spelling",
+      type: "Multiple Choice",
+      text: "",
+      options: ["", "", "", ""],
+      correctOption: "A",
+      correctAnswer: ""
+    });
+  };
+
+  // Firestore submission
+  const handleFinalize = async () => {
+    if (!challengeName.trim()) {
       Alert.alert("Validation", "Please enter a challenge name.");
       return;
     }
 
     if (questions.length < requiredQuestionCount) {
-      Alert.alert(
-        "Validation",
-        `You must add exactly ${requiredQuestionCount} questions.`
-      );
+      Alert.alert("Validation", `${challengeType} challenge requires ${requiredQuestionCount} questions. Please add ${requiredQuestionCount - questions.length} more.`);
       return;
     }
 
-    // Build the final object
-    const newChallenge = {
-      id: Date.now().toString(), // or random
-      name: challengeName,
-      type: challengeType,
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
-      module: "Mixed", // or we can store an array if each question might have a different module
-      questionCount: questions.length,
-      questionType: "Mixed", // because each question can have different type
-      questions,
-    };
+    setLoading(true);
 
-    // Navigate back to e.g. "ChallengesScreen" with new challenge
-    navigation.navigate("Challenges", {
-        screen: "ChallengesScreen",
-        params: {
-          newChallenge: newChallenge,
-        },
-    });
+    try {
+      const datePrefix = new Date().toISOString().split('T')[0].replace(/-/g, '');
+      const challengeId = `challenge_${datePrefix}_${Math.random().toString(36).substr(2, 6)}`;
+      
+      const challengeRef = doc(firestore, "challenges", challengeId);
+
+      await setDoc(challengeRef, {
+        id: challengeId,
+        title: challengeName,
+        type: challengeType,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        questions,
+        status: "active",
+        createdAt: serverTimestamp(),
+        createdBy: auth.currentUser?.uid,
+        participantCount: 0,
+        submissionCount: 0
+      });
+
+      Alert.alert("Success", "Challenge created successfully!");
+      navigation.navigate("Challenges", {
+        screen: "ChallengesMain",
+        params: { refresh: true }
+      });
+      
+    } catch (error) {
+      console.error("Firestore error:", error);
+      Alert.alert("Error", error.message.includes("permission") 
+        ? "You don't have permission to create challenges" 
+        : "Failed to save challenge. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // If we haven't reached the requiredQuestionCount, we keep showing the question form
-  const stillNeedQuestions = questions.length < requiredQuestionCount;
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} size="large" color="#6200ee" />
+        <Text>Saving Challenge...</Text>
+      </View>
+    );
+  }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Card style={styles.card}>
-        <Card.Title
-          title="Create a New Challenge"
-          subtitle="Organize daily/weekly/monthly tasks"
-          titleStyle={styles.heading}
+        <Card.Title 
+          title="Create Challenge" 
+          titleStyle={styles.title}
+          subtitle={`${challengeType} Challenge`} 
         />
         <Card.Content>
-          {/* Basic Info */}
-          <Text style={styles.label}>Challenge Name</Text>
+          {/* Challenge Info Section */}
           <TextInput
+            label="Challenge Name"
             mode="outlined"
             value={challengeName}
             onChangeText={setChallengeName}
             style={styles.input}
-            placeholder="e.g. Spelling Bee"
+            placeholder="e.g. Daily Spelling Challenge"
           />
 
           <Text style={styles.label}>Challenge Type</Text>
-          <View style={styles.pickerWrapper}>
-            <Picker
-              selectedValue={challengeType}
-              style={styles.picker}
-              onValueChange={(val) => {
-                setChallengeType(val);
-                // reset questions
-                setQuestions([]);
-                setCurrentQuestionIndex(0);
-              }}
+          <Picker
+            selectedValue={challengeType}
+            onValueChange={(val) => {
+              setChallengeType(val);
+              setQuestions([]);
+            }}
+            style={styles.picker}
+            dropdownIconColor="#6200ee"
+          >
+            {challengeTypes.map(type => (
+              <Picker.Item key={type} label={type} value={type} />
+            ))}
+          </Picker>
+
+          <View style={styles.dateRow}>
+            <Button
+              mode="outlined"
+              onPress={() => setShowStartDatePicker(true)}
+              icon="calendar"
+              style={styles.dateButton}
+              labelStyle={styles.buttonText}
             >
-              {challengeTypes.map((ct) => (
-                <Picker.Item key={ct} label={ct} value={ct} />
-              ))}
-            </Picker>
+              {startDate.toLocaleDateString()}
+            </Button>
+            {challengeType !== "Daily" && (
+              <Button
+                mode="outlined"
+                onPress={() => setShowEndDatePicker(true)}
+                icon="calendar"
+                style={styles.dateButton}
+                labelStyle={styles.buttonText}
+              >
+                {endDate.toLocaleDateString()}
+              </Button>
+            )}
           </View>
 
-          <Text style={styles.label}>Start Date</Text>
-          <Button
-            mode="outlined"
-            onPress={() => setShowStartDatePicker(true)}
-            icon="calendar"
-            style={styles.dateButton}
-          >
-            {startDate.toDateString()}
-          </Button>
           {showStartDatePicker && (
             <DateTimePicker
               value={startDate}
               mode="date"
-              display="default"
-              onChange={onStartDateChange}
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={(_, date) => handleDateChange(date, setStartDate, setShowStartDatePicker)}
+              minimumDate={new Date()} // Can't select past dates
             />
           )}
 
-          <Text style={[styles.label, { marginTop: 10 }]}>End Date</Text>
-          <Button
-            mode="outlined"
-            onPress={() => setShowEndDatePicker(true)}
-            icon="calendar"
-            style={styles.dateButton}
-          >
-            {endDate.toDateString()}
-          </Button>
           {showEndDatePicker && (
             <DateTimePicker
               value={endDate}
               mode="date"
-              display="default"
-              onChange={onEndDateChange}
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={(_, date) => handleDateChange(date, setEndDate, setShowEndDatePicker)}
+              minimumDate={startDate} // End date can't be before start date
             />
           )}
 
           <Divider style={styles.divider} />
 
-          {/* Show how many questions we need */}
-          <Text style={styles.label}>
-            You need to create exactly {requiredQuestionCount} questions. 
-          </Text>
-          <Text style={{ marginBottom: 10 }}>
-            Currently created: {questions.length}/{requiredQuestionCount}
+          {/* Questions Progress */}
+          <Text style={styles.progressText}>
+            {questions.length}/{requiredQuestionCount} Questions Added
           </Text>
 
-          {/* If we still need questions, show question form */}
-          {stillNeedQuestions && (
+          {/* Question Form */}
+          {questions.length < requiredQuestionCount ? (
             <>
-              <Text style={styles.label}>Question #{questions.length + 1}</Text>
+              <Text style={styles.sectionTitle}>Question {questions.length + 1}</Text>
 
-              {/* Module for this question (optional, if each question can be from a different module) */}
               <Text style={styles.label}>Module</Text>
-              <View style={styles.pickerWrapper}>
-                <Picker
-                  selectedValue={selectedModule}
-                  style={styles.picker}
-                  onValueChange={(val) => setSelectedModule(val)}
-                >
-                  {moduleOptions.map((mod) => (
-                    <Picker.Item key={mod} label={mod} value={mod} />
-                  ))}
-                </Picker>
-              </View>
+              <Picker
+                selectedValue={currentQuestion.module}
+                onValueChange={(val) => setCurrentQuestion(prev => ({...prev, module: val}))}
+                style={styles.picker}
+                dropdownIconColor="#6200ee"
+              >
+                {moduleOptions.map(mod => (
+                  <Picker.Item key={mod} label={mod} value={mod} />
+                ))}
+              </Picker>
 
-              {/* Question Type */}
               <Text style={styles.label}>Question Type</Text>
-              <View style={styles.pickerWrapper}>
-                <Picker
-                  selectedValue={questionType}
-                  style={styles.picker}
-                  onValueChange={(val) => setQuestionType(val)}
-                >
-                  {questionTypes.map((qt) => (
-                    <Picker.Item key={qt} label={qt} value={qt} />
-                  ))}
-                </Picker>
-              </View>
+              <Picker
+                selectedValue={currentQuestion.type}
+                onValueChange={(val) => setCurrentQuestion(prev => ({...prev, type: val}))}
+                style={styles.picker}
+                dropdownIconColor="#6200ee"
+              >
+                {questionTypes.map(type => (
+                  <Picker.Item key={type} label={type} value={type} />
+                ))}
+              </Picker>
 
-              {/* Question Text */}
-              <Text style={styles.label}>Question Text</Text>
               <TextInput
+                label="Question Text"
                 mode="outlined"
-                value={questionText}
-                onChangeText={setQuestionText}
-                style={styles.input}
+                value={currentQuestion.text}
+                onChangeText={(text) => setCurrentQuestion(prev => ({...prev, text}))}
                 multiline
-                placeholder="Type the question"
+                style={styles.input}
+                placeholder="Enter your question here"
               />
 
-              {/* If MC, show 4 options */}
-              {questionType === "Multiple Choice" && (
+              {currentQuestion.type === "Multiple Choice" ? (
                 <>
-                  <TextInput
-                    mode="outlined"
-                    label="Option A"
-                    value={optionA}
-                    onChangeText={setOptionA}
-                    style={styles.input}
-                  />
-                  <TextInput
-                    mode="outlined"
-                    label="Option B"
-                    value={optionB}
-                    onChangeText={setOptionB}
-                    style={styles.input}
-                  />
-                  <TextInput
-                    mode="outlined"
-                    label="Option C"
-                    value={optionC}
-                    onChangeText={setOptionC}
-                    style={styles.input}
-                  />
-                  <TextInput
-                    mode="outlined"
-                    label="Option D"
-                    value={optionD}
-                    onChangeText={setOptionD}
-                    style={styles.input}
-                  />
+                  {currentQuestion.options.map((option, index) => (
+                    <TextInput
+                      key={`option-${index}`}
+                      label={`Option ${String.fromCharCode(65 + index)}`}
+                      mode="outlined"
+                      value={option}
+                      onChangeText={(text) => {
+                        const newOptions = [...currentQuestion.options];
+                        newOptions[index] = text;
+                        setCurrentQuestion(prev => ({...prev, options: newOptions}));
+                      }}
+                      style={styles.input}
+                      placeholder={`Option ${String.fromCharCode(65 + index)}`}
+                    />
+                  ))}
 
-                  <Text style={styles.label}>Correct Option</Text>
-                  <View style={styles.pickerWrapper}>
-                    <Picker
-                      selectedValue={correctMCAnswer}
-                      style={styles.picker}
-                      onValueChange={(val) => setCorrectMCAnswer(val)}
-                    >
-                      <Picker.Item label="A" value="A" />
-                      <Picker.Item label="B" value="B" />
-                      <Picker.Item label="C" value="C" />
-                      <Picker.Item label="D" value="D" />
-                    </Picker>
-                  </View>
-                </>
-              )}
-
-              {/* If fill or T-F, show correct answer text input */}
-              {questionType !== "Multiple Choice" && (
-                <>
                   <Text style={styles.label}>Correct Answer</Text>
-                  <TextInput
-                    mode="outlined"
-                    value={correctAnswer}
-                    onChangeText={setCorrectAnswer}
-                    style={styles.input}
-                    placeholder={
-                      questionType === "True or False" ? "True or False" : "Fill in answer"
-                    }
-                  />
+                  <Picker
+                    selectedValue={currentQuestion.correctOption}
+                    onValueChange={(val) => setCurrentQuestion(prev => ({...prev, correctOption: val}))}
+                    style={styles.picker}
+                    dropdownIconColor="#6200ee"
+                  >
+                    {currentQuestion.options.map((_, index) => (
+                      <Picker.Item 
+                        key={`correct-${index}`} 
+                        label={String.fromCharCode(65 + index)} 
+                        value={String.fromCharCode(65 + index)} 
+                      />
+                    ))}
+                  </Picker>
                 </>
+              ) : (
+                <TextInput
+                  label="Correct Answer"
+                  mode="outlined"
+                  value={currentQuestion.correctAnswer}
+                  onChangeText={(text) => setCurrentQuestion(prev => ({...prev, correctAnswer: text}))}
+                  style={styles.input}
+                  placeholder={
+                    currentQuestion.type === "True or False" 
+                      ? "Enter 'True' or 'False'" 
+                      : "Enter the correct answer"
+                  }
+                />
               )}
 
               <Button
                 mode="contained"
                 onPress={handleAddQuestion}
-                style={{ marginTop: 10 }}
+                style={styles.addButton}
+                labelStyle={styles.buttonText}
+                disabled={!currentQuestion.text.trim()}
               >
                 Add Question
               </Button>
             </>
-          )}
-
-          <Divider style={styles.divider} />
-
-          {/* If user has created enough questions, show a finalize button */}
-          {questions.length === requiredQuestionCount && (
+          ) : (
             <Button
               mode="contained"
               onPress={handleFinalize}
-              style={{ marginTop: 10 }}
+              style={styles.finalizeButton}
+              labelStyle={styles.buttonText}
             >
-              Finalize Challenge
+              Publish Challenge
             </Button>
           )}
         </Card.Content>
       </Card>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  scrollContainer: {
+  container: {
     flexGrow: 1,
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    paddingBottom: 24,
   },
   card: {
-    marginBottom: 16,
     borderRadius: 8,
     elevation: 3,
+    backgroundColor: '#fff',
   },
-  heading: {
-    fontSize: 20,
-    fontWeight: "bold",
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#6200ee',
   },
   label: {
-    fontWeight: "bold",
-    marginTop: 10,
-    marginBottom: 5,
-    color: "#333",
+    marginVertical: 8,
+    fontWeight: '600',
+    color: '#333',
   },
   input: {
-    marginBottom: 10,
-  },
-  divider: {
-    marginVertical: 12,
-  },
-  dateButton: {
-    marginBottom: 10,
-    alignSelf: "flex-start",
-  },
-  pickerWrapper: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    overflow: "hidden",
-    marginBottom: 10,
+    marginBottom: 12,
+    backgroundColor: 'white',
   },
   picker: {
-    height: 50,
-    width: "100%",
+    marginBottom: 12,
+    backgroundColor: 'white',
+  },
+  dateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  dateButton: {
+    flex: 1,
+    marginHorizontal: 4,
+    borderColor: '#6200ee',
+  },
+  divider: {
+    marginVertical: 16,
+    height: 1,
+    backgroundColor: '#e0e0e0',
+  },
+  progressText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 8,
+    color: '#6200ee',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 12,
+    textAlign: 'center',
+    color: '#333',
+  },
+  addButton: {
+    marginTop: 16,
+    backgroundColor: '#6200ee',
+  },
+  finalizeButton: {
+    marginTop: 16,
+    backgroundColor: '#4CAF50',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
 });
 
+export default ChallengeCreationScreen;

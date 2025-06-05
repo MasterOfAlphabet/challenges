@@ -1,77 +1,141 @@
-import React, { useState, useContext } from "react";
-import { View, Alert } from "react-native";
-import { TextInput, Button, Text } from "react-native-paper";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { TextInput, Button, Text } from 'react-native-paper';
 import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase"; // adjust path
-import { AuthContext } from "../../App";
+import { auth, firestore } from "../../firebase"; // Ensure firestore is imported
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { AuthContext } from '../../App';
 
-export default function LoginScreen({ navigation }) {
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const { setLoggedInUser } = useContext(AuthContext);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter email and password.");
+    if (!email.trim() || !password.trim()) {
+      Alert.alert("Error", "Please enter both email and password");
       return;
     }
-
+  
+    setLoading(true);
     try {
-      // 1) Firebase Auth sign in
-      const userCred = await signInWithEmailAndPassword(auth, email, password);
-      const { uid } = userCred.user;
-
-      // 2) Load doc from Firestore => get role
-      const docRef = doc(db, "users", uid);
-      const snap = await getDoc(docRef);
-      if (!snap.exists()) {
-        Alert.alert("Error", "No Firestore user doc found!");
-        return;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // Fetch the user role from Firestore
+      const userRef = doc(firestore, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+  
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        setLoggedInUser({
+          ...user,
+          role: userData.role || "student", // Default to "student" if role is missing
+        });
+  
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Home" }],
+        });
+      } else {
+        Alert.alert("Login Error", "User data not found.");
       }
-      const userData = snap.data();
-      const userRole = userData.role; // e.g. "Teacher", "Student", etc.
-
-      // 3) Store in context
-      setLoggedInUser({
-        uid,
-        email: userCred.user.email,
-        role: userRole,
-      });
-
-      // 4) Navigate away (maybe Home or Dashboard)
-      navigation.navigate("Home");
-
-    } catch (err) {
-      console.error("Login error:", err);
-      Alert.alert("Login Failed", err.message);
+    } catch (error) {
+      console.error("Login error:", error);
+      let errorMessage = "Login failed. Please try again.";
+  
+      switch (error.code) {
+        case "auth/invalid-email":
+          errorMessage = "Invalid email address";
+          break;
+        case "auth/user-not-found":
+          errorMessage = "No account found with this email";
+          break;
+        case "auth/wrong-password":
+          errorMessage = "Incorrect password";
+          break;
+        case "auth/too-many-requests":
+          errorMessage = "Too many attempts. Try again later or reset your password";
+          break;
+      }
+  
+      Alert.alert("Login Error", errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>Login</Text>
-
+    <View style={styles.container}>
+      <Text style={styles.title}>Master of Alphabet</Text>
+      
       <TextInput
         label="Email"
+        mode="outlined"
         value={email}
         onChangeText={setEmail}
-        mode="outlined"
-        style={{ marginBottom: 15 }}
+        style={styles.input}
+        autoCapitalize="none"
+        keyboardType="email-address"
       />
+      
       <TextInput
         label="Password"
+        mode="outlined"
         value={password}
         onChangeText={setPassword}
+        style={styles.input}
         secureTextEntry
-        mode="outlined"
-        style={{ marginBottom: 15 }}
       />
-
-      <Button mode="contained" onPress={handleLogin}>
-        Log In
+      
+      <Button
+        mode="contained"
+        onPress={handleLogin}
+        loading={loading}
+        disabled={loading}
+        style={styles.button}
+      >
+        {loading ? 'Logging in...' : 'Login'}
+      </Button>
+      
+      <Button
+        onPress={() => navigation.navigate('Signup')}
+        style={styles.secondaryButton}
+      >
+        Create New Account
       </Button>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+    color: '#6200ee',
+  },
+  input: {
+    marginBottom: 15,
+    backgroundColor: 'white',
+  },
+  button: {
+    marginTop: 10,
+    paddingVertical: 5,
+    backgroundColor: '#6200ee',
+  },
+  secondaryButton: {
+    marginTop: 15,
+  },
+});
+
+export default LoginScreen;

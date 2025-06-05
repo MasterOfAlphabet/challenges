@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Accordion, Button } from 'react-native-paper';
-import { db, auth } from '../../firebase'; // Import Firebase initialization
+import { firestore, auth } from '../../firebase'; // Import Firebase initialization
 import { List} from 'react-native-paper'; // Use List.Accordion instead of Accordio
 import { signInAnonymously } from 'firebase/auth';
 import { collection, query, where, limit, getDocs, addDoc, doc, updateDoc, onSnapshot } from 'firebase/firestore';

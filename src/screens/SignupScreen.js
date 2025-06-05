@@ -4,7 +4,7 @@ import { TextInput, Button, Text } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { db, auth } from "../../firebase";
+import { firestore, auth } from "../../firebase"; // adjust path
 import { AuthContext } from "../../App";
 
 export default function SignupScreen({ navigation }) {
@@ -12,13 +12,14 @@ export default function SignupScreen({ navigation }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("S"); // default to Student
+  const [role, setRole] = useState("Student"); // default to Student
 
   const handleSignup = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Email and password are required");
       return;
     }
+
     try {
       // 1) Create user in Firebase Auth
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
@@ -27,7 +28,8 @@ export default function SignupScreen({ navigation }) {
       // 2) Create doc in Firestore: /users/{uid}
       await setDoc(doc(db, "users", uid), {
         email,
-        role, // "S", "T", "P", "Admin"
+        role, // "Student", "Teacher", "Principal", "Admin"
+        uid, // Include the UID in the Firestore document
       });
 
       // 3) Store in your local context
