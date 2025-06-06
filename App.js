@@ -45,7 +45,13 @@ import ModuleSelectionScreen from './src/screens/ModuleSelectionScreen';
 
 import ModuleSkillAnalysisDetailsScreen from './src/screens/ModuleSkillAnalysisDetailsScreen';
 
+
 import DailyChallengesScreen from './src/screens/DailyChallengesScreen';
+
+import DWMSChallengeScreen from "./src/screens/DWMSChallengeScreen";
+import WinnersScreen from "./src/screens/WinnersScreen";
+import SubmitChallengeScreen from "./src/screens/SubmitChallengeScreen";
+import AnswerChallengeScreen from "./src/screens/AnswerChallengeScreen";
 
 // Auth Context (unchanged)
 export const AuthContext = createContext(null);
@@ -133,6 +139,11 @@ function ChallengesStackScreen() {
         component={AnnouncingWinnersScreen} 
         options={{ headerShown: false }}
       />
+
+         <Stack.Screen name="DWMSChallengeScreen" component={DWMSChallengeScreen} />
+        <Stack.Screen name="WinnersScreen" component={WinnersScreen} />
+        <Stack.Screen name="SubmitChallengeScreen" component={SubmitChallengeScreen} />
+
     </Stack.Navigator>
   );
 }
@@ -172,6 +183,10 @@ function ModuleStack() {
       <Stack.Screen name="Unscramble" component={Unscramble} />
       <Stack.Screen name="DiagnosticDashboard" component={DiagnosticDashboard} />
       <Stack.Screen name="DailyChallengesScreen" component={DailyChallengesScreen} />
+      <Stack.Screen name="DWMSChallengeScreen" component={DWMSChallengeScreen} />
+       <Stack.Screen name="SubmitChallengeScreen" component={SubmitChallengeScreen} />
+ <Stack.Screen name="WinnersScreen" component={WinnersScreen} />
+  <Stack.Screen name="AnswerChallengeScreen" component={AnswerChallengeScreen} />
       
     </Stack.Navigator>
   );

@@ -352,6 +352,13 @@ const handleLogout = () => {
             <Text style={styles.linkText}>Daily Challenges</Text>
           </TouchableOpacity>
 
+            <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("DWMSChallengeScreen")}
+          >
+            <Text style={styles.linkText}>DWMS Challenges</Text>
+          </TouchableOpacity>
+
         </View>
 
         {/* Diagnostic Buttons */}
