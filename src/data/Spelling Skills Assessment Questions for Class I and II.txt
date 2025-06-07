@@ -1,0 +1,685 @@
+const spellingSkillsAssessment = {
+  classGroup: "I-II",
+  categories: [
+    {
+      name: "Dictation",
+      description: "Listen to the word and type it correctly.",
+      questions: [
+        {
+          id: 1,
+          word: "pen",
+          audio: "/audio/pen.mp3",
+          answer: "pen",
+        },
+        {
+          id: 2,
+          word: "book",
+          audio: "/audio/book.mp3",
+          answer: "book",
+        },
+        {
+          id: 3,
+          word: "cake",
+          audio: "/audio/cake.mp3",
+          answer: "cake",
+        },
+        {
+          id: 4,
+          word: "milk",
+          audio: "/audio/milk.mp3",
+          answer: "milk",
+        },
+      ],
+    },
+    {
+      name: "Find the Correct Spelling (MCQ)",
+      description: "Choose the correctly spelled word from four options.",
+      questions: [
+        {
+          id: 5,
+          question: "Which is the correct spelling?",
+          options: ["hous", "hose", "house", "huse"],
+          answer: "house",
+        },
+        {
+          id: 6,
+          question: "Which is the correct spelling?",
+          options: ["clowd", "cloud", "clud", "clod"],
+          answer: "cloud",
+        },
+        {
+          id: 7,
+          question: "Which is the correct spelling?",
+          options: ["skool", "schoool", "school", "schol"],
+          answer: "school",
+        },
+        {
+          id: 8,
+          question: "Which is the correct spelling?",
+          options: ["carrot", "carot", "karot", "carott"],
+          answer: "carrot",
+        },
+      ],
+    },
+    {
+      name: "Find the Missing Letter",
+      description: "Fill in the missing letter to complete the word.",
+      questions: [
+        {
+          id: 9,
+          word: "f _ g",
+          hint: "A green animal that hops.",
+          answer: "frog",
+        },
+        {
+          id: 10,
+          word: "k _ y",
+          hint: "You use this to unlock a door.",
+          answer: "key",
+        },
+        {
+          id: 11,
+          word: "b _ d",
+          hint: "Where you sleep at night.",
+          answer: "bed",
+        },
+        {
+          id: 12,
+          word: "s _ a",
+          hint: "A big body of water.",
+          answer: "sea",
+        },
+      ],
+    },
+    {
+      name: "Unscramble",
+      description: "Rearrange the scrambled letters to form the correct word.",
+      questions: [
+        {
+          id: 13,
+          scrambled: "atc",
+          hint: "A small animal that meows.",
+          answer: "cat",
+        },
+        {
+          id: 14,
+          scrambled: "ogd",
+          hint: "A pet that barks.",
+          answer: "dog",
+        },
+        {
+          id: 15,
+          scrambled: "uns",
+          hint: "It shines in the sky during the day.",
+          answer: "sun",
+        },
+        {
+          id: 16,
+          scrambled: "tah",
+          hint: "You wear this on your head.",
+          answer: "hat",
+        },
+      ],
+    },
+    {
+      name: "Spell the Pic",
+      description: "Type the word that matches the picture shown.",
+      questions: [
+        {
+          id: 17,
+          image: "tree.jpg",
+          answer: "tree",
+        },
+        {
+          id: 18,
+          image: "ball.jpg",
+          answer: "ball",
+        },
+        {
+          id: 19,
+          image: "fish.jpg",
+          answer: "fish",
+        },
+        {
+          id: 20,
+          image: "star.jpg",
+          answer: "star",
+        },
+      ],
+    },
+  ],
+};
+
+const spellingSkillsAssessment = {
+  classGroup: "I-II",
+  categories: [
+    {
+      name: "Dictation",
+      description: "Listen to the word and type it correctly.",
+      questions: [
+        {
+          id: 21,
+          word: "apple",
+          audio: "/audio/apple.mp3",
+          answer: "apple",
+        },
+        {
+          id: 22,
+          word: "jump",
+          audio: "/audio/jump.mp3",
+          answer: "jump",
+        },
+        {
+          id: 23,
+          word: "duck",
+          audio: "/audio/duck.mp3",
+          answer: "duck",
+        },
+        {
+          id: 24,
+          word: "hand",
+          audio: "/audio/hand.mp3",
+          answer: "hand",
+        },
+      ],
+    },
+    {
+      name: "Find the Correct Spelling (MCQ)",
+      description: "Choose the correctly spelled word from four options.",
+      questions: [
+        {
+          id: 25,
+          question: "Which is the correct spelling?",
+          options: ["flor", "flower", "floer", "flowr"],
+          answer: "flower",
+        },
+        {
+          id: 26,
+          question: "Which is the correct spelling?",
+          options: ["bana", "banan", "banana", "banna"],
+          answer: "banana",
+        },
+        {
+          id: 27,
+          question: "Which is the correct spelling?",
+          options: ["birb", "byrd", "bird", "berd"],
+          answer: "bird",
+        },
+        {
+          id: 28,
+          question: "Which is the correct spelling?",
+          options: ["butr", "butter", "buttur", "buter"],
+          answer: "butter",
+        },
+      ],
+    },
+    {
+      name: "Find the Missing Letter",
+      description: "Fill in the missing letter to complete the word.",
+      questions: [
+        {
+          id: 29,
+          word: "b _ _ k",
+          hint: "You read stories in this.",
+          answer: "book",
+        },
+        {
+          id: 30,
+          word: "r _ _ n",
+          hint: "Falls from the sky when cloudy.",
+          answer: "rain",
+        },
+        {
+          id: 31,
+          word: "s _ _ p",
+          hint: "You use this to wash your hands.",
+          answer: "soap",
+        },
+        {
+          id: 32,
+          word: "l _ _ p",
+          hint: "A baby does this with joy.",
+          answer: "leap",
+        },
+      ],
+    },
+    {
+      name: "Unscramble",
+      description: "Rearrange the scrambled letters to form the correct word.",
+      questions: [
+        {
+          id: 33,
+          scrambled: "epn",
+          hint: "You write with this.",
+          answer: "pen",
+        },
+        {
+          id: 34,
+          scrambled: "tbir",
+          hint: "Flies in the sky.",
+          answer: "bird",
+        },
+        {
+          id: 35,
+          scrambled: "ockc",
+          hint: "Tells time on the wall.",
+          answer: "clock",
+        },
+        {
+          id: 36,
+          scrambled: "oanlmi",
+          hint: "Lives in the jungle.",
+          answer: "animal",
+        },
+      ],
+    },
+    {
+      name: "Spell the Pic",
+      description: "Type the word that matches the picture shown.",
+      questions: [
+        {
+          id: 37,
+          image: "moon.jpg",
+          answer: "moon",
+        },
+        {
+          id: 38,
+          image: "bell.jpg",
+          answer: "bell",
+        },
+        {
+          id: 39,
+          image: "nest.jpg",
+          answer: "nest",
+        },
+        {
+          id: 40,
+          image: "kite.jpg",
+          answer: "kite",
+        },
+      ],
+    },
+  ],
+};
+
+const spellingSkillsAssessment = {
+  classGroup: "I-II",
+  categories: [
+    {
+      name: "Dictation",
+      description: "Listen to the word and type it correctly.",
+      questions: [
+        { id: 41, word: "dog", audio: "/audio/dog.mp3", answer: "dog" },
+        { id: 42, word: "cup", audio: "/audio/cup.mp3", answer: "cup" },
+        { id: 43, word: "fish", audio: "/audio/fish.mp3", answer: "fish" },
+        { id: 44, word: "hat", audio: "/audio/hat.mp3", answer: "hat" },
+      ],
+    },
+    {
+      name: "Find the Correct Spelling (MCQ)",
+      description: "Choose the correctly spelled word from four options.",
+      questions: [
+        {
+          id: 45,
+          question: "Which is the correct spelling?",
+          options: ["frut", "fruit", "froot", "fruot"],
+          answer: "fruit",
+        },
+        {
+          id: 46,
+          question: "Which is the correct spelling?",
+          options: ["cndy", "candy", "candee", "cndee"],
+          answer: "candy",
+        },
+        {
+          id: 47,
+          question: "Which is the correct spelling?",
+          options: ["clok", "clook", "clock", "clokc"],
+          answer: "clock",
+        },
+        {
+          id: 48,
+          question: "Which is the correct spelling?",
+          options: ["gardn", "garden", "gardden", "gardon"],
+          answer: "garden",
+        },
+      ],
+    },
+    {
+      name: "Find the Missing Letter",
+      description: "Fill in the missing letter to complete the word.",
+      questions: [
+        {
+          id: 49,
+          word: "c _ t",
+          hint: "A pet that says meow.",
+          answer: "cat",
+        },
+        {
+          id: 50,
+          word: "b _ _ l",
+          hint: "You play with this.",
+          answer: "ball",
+        },
+        {
+          id: 51,
+          word: "f _ _ r",
+          hint: "A place with rides and games.",
+          answer: "fair",
+        },
+        {
+          id: 52,
+          word: "h _ _ s e",
+          hint: "You live in this.",
+          answer: "house",
+        },
+      ],
+    },
+    {
+      name: "Unscramble",
+      description: "Rearrange the scrambled letters to form the correct word.",
+      questions: [
+        {
+          id: 53,
+          scrambled: "odg",
+          hint: "A friendly pet that barks.",
+          answer: "dog",
+        },
+        {
+  id: 54,
+  scrambled: "tejakc",
+  hint: "Worn on a cold day.",
+  answer: "jacket",
+},
+{
+  id: 55,
+  scrambled: "lappe",
+  hint: "A fruit that's red or green.",
+  answer: "apple",
+},
+
+        {
+          id: 56,
+          scrambled: "ebar",
+          hint: "A brown animal that roars.",
+          answer: "bear",
+        },
+      ],
+    },
+    {
+      name: "Spell the Pic",
+      description: "Type the word that matches the picture shown.",
+      questions: [
+        {
+          id: 57,
+          image: "frog.jpg",
+          answer: "frog",
+        },
+        {
+          id: 58,
+          image: "milk.jpg",
+          answer: "milk",
+        },
+        {
+          id: 59,
+          image: "leaf.jpg",
+          answer: "leaf",
+        },
+        {
+          id: 60,
+          image: "cake.jpg",
+          answer: "cake",
+        },
+      ],
+    },
+  ],
+};
+
+const spellingSkillsAssessment = {
+  classGroup: "I-II",
+  categories: [
+    {
+      name: "Dictation",
+      description: "Listen to the word and type it correctly.",
+      questions: [
+        { id: 61, word: "chair", audio: "/audio/chair.mp3", answer: "chair" },
+        { id: 62, word: "table", audio: "/audio/table.mp3", answer: "table" },
+        { id: 63, word: "grass", audio: "/audio/grass.mp3", answer: "grass" },
+        { id: 64, word: "bird", audio: "/audio/bird.mp3", answer: "bird" },
+      ],
+    },
+    {
+      name: "Find the Correct Spelling (MCQ)",
+      description: "Choose the correctly spelled word from four options.",
+      questions: [
+        {
+          id: 65,
+          question: "Which is the correct spelling?",
+          options: ["watr", "watter", "water", "wator"],
+          answer: "water",
+        },
+        {
+          id: 66,
+          question: "Which is the correct spelling?",
+          options: ["flufy", "fluffy", "flufi", "flufey"],
+          answer: "fluffy",
+        },
+        {
+          id: 67,
+          question: "Which is the correct spelling?",
+          options: ["elefant", "elephant", "elephent", "elephint"],
+          answer: "elephant",
+        },
+        {
+          id: 68,
+          question: "Which is the correct spelling?",
+          options: ["tiger", "tigar", "tyger", "tigerr"],
+          answer: "tiger",
+        },
+      ],
+    },
+    {
+      name: "Find the Missing Letter",
+      description: "Fill in the missing letter to complete the word.",
+      questions: [
+        {
+          id: 69,
+          word: "s _ n",
+          hint: "Shines in the sky during the day.",
+          answer: "sun",
+        },
+        {
+          id: 70,
+          word: "m _ nkey",
+          hint: "A playful animal that swings on trees.",
+          answer: "monkey",
+        },
+        {
+          id: 71,
+          word: "c _ p",
+          hint: "You drink from this.",
+          answer: "cup",
+        },
+        {
+          id: 72,
+          word: "b _ d",
+          hint: "A soft place where you sleep.",
+          answer: "bed",
+        },
+      ],
+    },
+    {
+  "name": "Unscramble",
+  "description": "Rearrange the scrambled letters to form the correct word.",
+  "questions": [
+    {
+      "id": 73,
+      "scrambled": "act",
+      "hint": "A small animal that meows.",
+      "answer": "cat"
+    },
+    {
+      "id": 74,
+      "scrambled": "dgo",
+      "hint": "A pet that barks.",
+      "answer": "dog"
+    },
+    {
+      "id": 75,
+      "scrambled": "nus",
+      "hint": "It shines in the sky during the day.",
+      "answer": "sun"
+    },
+    {
+      "id": 76,
+      "scrambled": "tah",
+      "hint": "You wear this on your head.",
+      "answer": "hat"
+    }
+  ]
+},
+
+    {
+      name: "Spell the Pic",
+      description: "Type the word that matches the picture shown.",
+      questions: [
+        {
+          id: 77,
+          image: "apple.jpg",
+          answer: "apple",
+        },
+        {
+          id: 78,
+          image: "dog.jpg",
+          answer: "dog",
+        },
+        {
+          id: 79,
+          image: "star.jpg",
+          answer: "star",
+        },
+        {
+          id: 80,
+          image: "fish.jpg",
+          answer: "fish",
+        },
+      ],
+    },
+  ],
+};
+
+const spellingSkillsAssessment = {
+  classGroup: "I-II",
+  categories: [
+    {
+      name: "Dictation",
+      description: "Listen to the word and type it correctly.",
+      questions: [
+        { id: 81, word: "bus", audio: "/audio/bus.mp3", answer: "bus" },
+        { id: 82, word: "cake", audio: "/audio/cake.mp3", answer: "cake" },
+        { id: 83, word: "leaf", audio: "/audio/leaf.mp3", answer: "leaf" },
+        { id: 84, word: "shoe", audio: "/audio/shoe.mp3", answer: "shoe" },
+      ],
+    },
+    {
+      name: "Find the Correct Spelling (MCQ)",
+      description: "Choose the correctly spelled word from four options.",
+      questions: [
+        {
+          id: 85,
+          question: "Which is the correct spelling?",
+          options: ["trea", "tree", "tire", "trie"],
+          answer: "tree",
+        },
+        {
+          id: 86,
+          question: "Which is the correct spelling?",
+          options: ["snak", "snake", "snaek", "snayk"],
+          answer: "snake",
+        },
+        {
+          id: 87,
+          question: "Which is the correct spelling?",
+          options: ["grape", "grap", "graep", "graip"],
+          answer: "grape",
+        },
+        {
+          id: 88,
+          question: "Which is the correct spelling?",
+          options: ["plant", "plent", "plaant", "plnat"],
+          answer: "plant",
+        },
+      ],
+    },
+    {
+      name: "Find the Missing Letter",
+      description: "Fill in the missing letter to complete the word.",
+      questions: [
+        {
+          id: 89,
+          word: "b _ g",
+          hint: "A small insect.",
+          answer: "bug",
+        },
+        {
+          id: 90,
+          word: "f _ sh",
+          hint: "Swims in water.",
+          answer: "fish",
+        },
+        {
+          id: 91,
+          word: "c _ w",
+          hint: "Gives us milk.",
+          answer: "cow",
+        },
+        {
+          id: 92,
+          word: "h _ t",
+          hint: "You wear this on your head.",
+          answer: "hat",
+        },
+      ],
+    },
+    {
+      name: "Unscramble",
+      description: "Rearrange the scrambled letters to form the correct word.",
+      questions: [
+        {
+          id: 93,
+          scrambled: "rabe",
+          hint: "A big animal with long ears.",
+          answer: "bear",
+        },
+        {
+          id: 94,
+          scrambled: "upmknpi",
+          hint: "A large orange vegetable.",
+          answer: "pumpkin",
+        },
+        {
+          id: 95,
+          scrambled: "tgier",
+          hint: "A wild animal with stripes.",
+          answer: "tiger",
+        },
+        {
+          id: 96,
+          scrambled: "wofl",
+          hint: "A wild animal that howls.",
+          answer: "wolf",
+        },
+      ],
+    },
+    {
+      name: "Spell the Pic",
+      description: "Type the word that matches the picture shown.",
+      questions: [
+        { id: 97, image: "duck.jpg", answer: "duck" },
+        { id: 98, image: "rose.jpg", answer: "rose" },
+        { id: 99, image: "ship.jpg", answer: "ship" },
+        { id: 100, image: "lion.jpg", answer: "lion" },
+      ],
+    },
+  ],
+};
